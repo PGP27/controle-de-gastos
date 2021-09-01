@@ -3,7 +3,7 @@ import Header from '../components/Header/Header';
 
 const index = () => {
   return (
-    <div>
+    <div className="w-full flex justify-center">
       <Header />
     </div>
   );

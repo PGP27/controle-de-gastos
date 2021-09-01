@@ -7,8 +7,10 @@ import expenseDetails from './pages/expenseDetails';
 
 const App = () => {
   return (
-    <div>
-      <Link to="/"><h1>Controle de gastos</h1></Link>
+    <div className="w-full flex flex-col items-center">
+      <Link to="/" className="flex justify-center">
+        <h1 className="w-full text-3xl text-center p-4 sm:text-5xl lg:text-6xl">Controle de gastos</h1>
+      </Link>
       <Switch>
         <Route exact path="/" component={ home } />
         <Route path="/add-expense" component={ addExpense } />
