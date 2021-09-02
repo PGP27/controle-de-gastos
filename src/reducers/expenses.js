@@ -1,4 +1,4 @@
-import { ADD_EXPENSE, REMOVE_EXPENSE } from '../actions/actionsType';
+import { ADD_FILTER, REMOVE_FILTERS } from '../actions/actionsType';
 
 const INITIAL_STATE = {
   expenses: [],
@@ -6,10 +6,10 @@ const INITIAL_STATE = {
 
 function expenses(state = INITIAL_STATE, action) {
   switch (action.type) {
-  case ADD_EXPENSE:
-    return { expenses: [...state.expenses, action.value] };
-  case REMOVE_EXPENSE:
-    return { expenses: state.expenses.filter((expense) => expense.id !== action.value) };
+  case ADD_FILTER:
+    return { expenses: action.value };
+  case REMOVE_FILTERS:
+    return { expenses: [] };
   default:
     return state;
   }

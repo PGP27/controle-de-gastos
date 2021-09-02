@@ -31,7 +31,7 @@ const Header = () => {
           </div>
           <button
             type="button"
-            className="w-1/2 px-2 mx-2 shadow-lg border-2 border-black rounded-lg bg-white transition hover:bg-green-100 sm:w-20"
+            className="w-1/2 px-2 m-2 shadow-lg border-2 border-black rounded-lg bg-white transition hover:bg-green-100 sm:w-20"
           >
             Filtrar
           </button>
