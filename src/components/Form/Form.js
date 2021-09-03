@@ -1,38 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { expenseCategoryTypes } from '../../utils/index';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 const Form = () => {
   const INITIAL_STATE = {
-    name: '',
-    number: 1,
     category: 'Outros',
+    number: 1,
     description: '',
+    favorite: false,
   }
 
   const [expense, setExpense] = useState(INITIAL_STATE);
-
-  const expenses = useSelector((state) => state.expenses.expenses);
+  const [descriptionLength, setDescriptionLength] = useState(0);
 
   const { id } = useParams();
 
   useEffect(() => {
     const setInitExpense = () => {
+      const expensesStore = JSON.parse(localStorage.getItem('filteredExpenses'));
       if (id) {
-        const filteredExpense = expenses.find((expense) => expense.id === id);
+        const filteredExpense = expensesStore.find((expense) => expense.id === id);
         setExpense(filteredExpense);
       }
     };
     setInitExpense();
-  }, [expenses, id]);
+  }, [id]);
 
-  const handleChange = ({ target: { name, value } }) => {
+  const handleChange = ({ target: { name, value, checked } }) => {
+    const newValue = name === 'favorite' ? checked : value;
     setExpense({
       ...expense,
-      [name]: value,
+      [name]: newValue,
     });
+    if (name === 'description') {
+      setDescriptionLength(value.length);
+    }
   };
 
   const clearForm = () => {
@@ -40,57 +43,54 @@ const Form = () => {
   };
 
   const saveExpense = () => {
-    if (JSON.parse(localStorage.getItem('filteredExpenses')) === null) {
-      localStorage.setItem('filteredExpenses', JSON.stringify([]));
-    }
-    const filteredExpenses = JSON.parse(localStorage.getItem('filteredExpenses'));
-    const day = new Date().getDate();
-    const month = new Date().getMonth();
-    const year = new Date().getFullYear();
-    if (id) {
-      const expenseEdit = filteredExpenses.find((expense) => expense.id === id);
-      const { id: expenseId } = expenseEdit;
-      const modificationDate = `${day}/${month}/${year}`;
-      const newExpense = {
-        ...expense,
-        id: expenseId,
-        modificationDate,
-      };
-      const newFilteredExpenses = filteredExpenses.filter((expense) => expense.id !== id);
-      newFilteredExpenses.push(newExpense);
-      localStorage.setItem('filteredExpenses', JSON.stringify(newFilteredExpenses));
+    const { number, description } = expense;
+
+    if (number < 1) {
+      alert('Digite um valor maior ou igual a 1');
+    } else if (description.length <= 0) {
+      alert('Digite uma descrição');
     } else {
+      if (JSON.parse(localStorage.getItem('filteredExpenses')) === null) {
+        localStorage.setItem('filteredExpenses', JSON.stringify([]));
+      }
+      const filteredExpenses = JSON.parse(localStorage.getItem('filteredExpenses'));
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
+      const year = new Date().getFullYear();
+  
       const creationDate = `${day}/${month}/${year}`;
       const newExpense = {
         ...expense,
         id: uuidv4(),
         creationDate,
       };
+  
       filteredExpenses.push(newExpense);
       localStorage.setItem('filteredExpenses', JSON.stringify(filteredExpenses));
+      alert('Gasto adicionado com sucesso!');
     }
     clearForm();
   }
 
   if (expense) {
-    const { name, number, category, description } = expense;
+    const { number, category, description, favorite } = expense;
     const title = id ? 'Editar gasto' : 'Adicionar gasto';
     return (
       <form className="w-full flex flex-col items-center p-2 shadow-lg rounded-lg border border-gray bg-blue-50 sm:w-4/5 lg:w-1/2">
         <legend className="mt-4 text-2xl">{ title }</legend>
         <div className="w-full flex flex-col items-center">
           <div className="flex flex-col w-4/5 mt-4">
-            <span>Nome:</span>
-            <input
-              type="text"
-              required
-              autoCorrect="off"
-              autoComplete="off"
-              name="name"
-              value={ name }
+            <span>Categoria:</span>
+            <select
+              required name="category"
+              value={ category }
               onChange={ handleChange }
-              className="shadow-lg p-2 rounded-md border border-gray focus:outline-none focus:ring-2"
-            />
+              className="p-2 outline-none shadow-lg rounded-md bg-white"
+            >
+              { expenseCategoryTypes.map((category) => (
+                <option key={ category }>{ category }</option>
+              )) }
+            </select>
           </div>
           <div className="flex flex-col w-4/5 mt-4">
             <span>Valor:</span>
@@ -107,19 +107,6 @@ const Form = () => {
               className="shadow-lg p-2 rounded-md border border-gray focus:outline-none focus:ring-2"
             />
           </div>
-          <div className="flex flex-col w-4/5 mt-4">
-            <span>Categoria:</span>
-            <select
-              required name="category"
-              value={ category }
-              onChange={ handleChange }
-              className="p-2 outline-none shadow-lg rounded-md bg-white"
-            >
-              { expenseCategoryTypes.map((category) => (
-                <option key={ category }>{ category }</option>
-              )) }
-            </select>
-          </div>
         </div>
         <div className="flex flex-col w-4/5 mt-4">
           <span>Descrição:</span>
@@ -127,15 +114,27 @@ const Form = () => {
             required
             autoCorrect="off"
             autoComplete="off"
-            rows="6"
+            rows="3"
+            maxLength="100"
             style={ { resize: 'none' } }
             name="description"
             value={ description }
             onChange={ handleChange }
             className="shadow-lgs p-2 rounded-md shadow-lg border border-gray focus:outline-none focus:ring-2"
           />
+          <span>Caracteres restantes: { 100 - descriptionLength }</span>
         </div>
-        <div className="w-4/5 mt-4 mb-2 flex justify-evenly text-lg">
+        <div className="flex items-center w-4/5 mt-4">
+          <span>Favoritar:</span>
+          <input
+            type="checkbox"
+            name="favorite"
+            checked={ favorite }
+            onChange={ handleChange }
+            className="ml-4"
+          />
+        </div>
+        <div className="w-4/5 mt-6 mb-2 flex justify-evenly text-lg">
           <button
             type="button"
             onClick={ clearForm }

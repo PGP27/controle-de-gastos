@@ -13,7 +13,7 @@ const Header = () => {
         </Link>
         <input
           type="text"
-          placeholder="Busque pelo nome ou descrição de um gasto"
+          placeholder="Busque pela descrição de um gasto"
           className="w-4/5 shadow-lg p-2 rounded-md border border-gray focus:outline-none focus:ring-2 sm:w-3/5"
           autoCorrect="off"
           autoComplete="off"
@@ -27,6 +27,7 @@ const Header = () => {
                 { expenseCategoryTypes.map((category) => (
                   <option key={ category }>{ category }</option>
                 )) }
+                <option>Todos</option>
               </select>
           </div>
           <button

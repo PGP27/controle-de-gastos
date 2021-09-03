@@ -10,7 +10,10 @@ const ExpensesList = () => {
   useEffect(() => {
     const getExpenses = () => {
       if (filteredExpenses.length === 0) {
-        setExpenses(JSON.parse(localStorage.getItem('filteredExpenses')));
+        const expensesStore = JSON.parse(localStorage.getItem('filteredExpenses'));
+        if (expensesStore) {
+          setExpenses(expensesStore);
+        }
       } else {
         setExpenses(filteredExpenses);
       }
@@ -18,46 +21,46 @@ const ExpensesList = () => {
     getExpenses();
   }, [filteredExpenses]);
 
-  return (
-    <div className="flex justify-center w-full mt-6">
-      <ul className="flex flex-col items-center xl:w-4/5 border border-gray-200">
-        { expenses.map(({ id, name, category, number, description, creationDate, modificationDate }, index) => {
-          const color = index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200';
-          const modification = modificationDate ? modificationDate : '-';
-          return (
-            <Link to={`/expense/${ id }`} key={ id } className="w-full">
-              <li className={`grid grid-cols-2 ${ color } sm:grid-cols-3 lg:flex flex-row`}>
+  if (expenses.length > 0) {
+    return (
+      <div className="flex justify-center w-full mt-6">
+        <ul className="w-full flex flex-col items-center border border-gray-200">
+          { expenses.map(({ id, category, number, description, creationDate, favorite }, index) => {
+            const color = index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200';
+            const favoriteText = favorite === true ? 'Sim' : 'Não';
+            return (
+              <li key={ id } className={`w-full grid grid-cols-2 ${ color } sm:grid-cols-3 lg:flex flex-row`}>
                 <div className="flex flex-col w-full p-2 px-6 overflow-auto">
-                  <span>Nome: </span>
-                  <p className="overflow-auto">{ name }</p>
-                </div>
-                <div className="flex flex-col w-full p-2 px-6 overflow-auto">
-                  <span>Categoria: </span>
+                  <span>Categoria:</span>
                   <p className="overflow-auto">{ category }</p>
                 </div>
                 <div className="flex flex-col w-full p-2 px-6 overflow-auto">
-                  <span>Valor: </span>
-                  <p className="overflow-auto">{ number }</p>
+                  <span>Valor:</span>
+                  <p className="overflow-auto">R$ { number }</p>
                 </div>
                 <div className="flex flex-col w-full p-2 px-6 overflow-auto">
-                  <span>Descrição: </span>
+                  <span>Descrição:</span>
                   <p className="overflow-auto">{ description }</p>
                 </div>
                 <div className="flex flex-col w-full p-2 px-6 overflow-auto">
-                  <span>Data de criação: </span>
+                  <span>Criação:</span>
                   <p className="overflow-auto">{ creationDate }</p>
                 </div>
-                <div className="flex flex-col w-full p-2 px-6 overflow-auto">
-                  <span>Data da última edição: </span>
-                  <p className="overflow-auto">{ modification }</p>
+                <div className="flex items-center w-full p-2 px-6">
+                  <span>Favorito:</span>
+                  <p className="ml-2">{ favoriteText }</p>
                 </div>
+                <Link to={`/expense/${ id }`} className="flex items-center w-full p-2 px-6 overflow-auto">
+                  Ver detalhes
+                </Link>
               </li>
-            </Link>
-          );
-        }) }
-      </ul>
-    </div>
-  );
+            );
+          }) }
+        </ul>
+      </div>
+    );
+  }
+  return null;
 };
 
 export default ExpensesList;
