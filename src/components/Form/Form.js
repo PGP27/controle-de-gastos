@@ -76,13 +76,14 @@ const Form = () => {
     const { number, category, description, favorite } = expense;
     const title = id ? 'Editar gasto' : 'Adicionar gasto';
     return (
-      <form className="w-full flex flex-col items-center p-2 shadow-lg rounded-lg border border-gray bg-blue-50 sm:w-4/5 lg:w-1/2">
+      <form className="w-full flex flex-col items-center p-2 shadow-lg rounded-lg border border-gray bg-blue-100 sm:w-4/5 lg:w-1/2">
         <legend className="mt-4 text-2xl">{ title }</legend>
         <div className="w-full flex flex-col items-center">
           <div className="flex flex-col w-4/5 mt-4">
             <span>Categoria:</span>
             <select
-              required name="category"
+              required
+              name="category"
               value={ category }
               onChange={ handleChange }
               className="p-2 outline-none shadow-lg rounded-md bg-white"

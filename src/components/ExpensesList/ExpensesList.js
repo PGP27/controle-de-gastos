@@ -24,35 +24,41 @@ const ExpensesList = () => {
   if (expenses.length > 0) {
     return (
       <div className="flex justify-center w-full mt-6">
-        <ul className="w-full flex flex-col items-center border border-gray-200">
+        <ul className="w-full flex flex-col items-center shadow-lg border border-gray-200 xl:w-10/12">
           { expenses.map(({ id, category, number, description, creationDate, favorite }, index) => {
             const color = index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200';
             const favoriteText = favorite === true ? 'Sim' : 'Não';
             return (
-              <li key={ id } className={`w-full grid grid-cols-2 ${ color } sm:grid-cols-3 lg:flex flex-row`}>
-                <div className="flex flex-col w-full p-2 px-6 overflow-auto">
+              <li key={ id } className={`w-full grid grid-cols-2 ${ color } sm:grid-cols-3 lg:flex lg:justify-evenly`}>
+                <div className="flex flex-col w-60 p-2 px-6 xl:flex-row xl:items-center">
                   <span>Categoria:</span>
-                  <p className="overflow-auto">{ category }</p>
+                  <div className="xl:ml-2">
+                    <p>{ category }</p>
+                  </div>
                 </div>
-                <div className="flex flex-col w-full p-2 px-6 overflow-auto">
+                <div className="flex flex-col w-60 p-2 px-6 xl:flex-row xl:items-center">
                   <span>Valor:</span>
-                  <p className="overflow-auto">R$ { number }</p>
+                  <div className="xl:ml-2">
+                    <p className="overflow-auto">R${ number }</p>
+                  </div>
                 </div>
-                <div className="flex flex-col w-full p-2 px-6 overflow-auto">
-                  <span>Descrição:</span>
-                  <p className="overflow-auto">{ description }</p>
-                </div>
-                <div className="flex flex-col w-full p-2 px-6 overflow-auto">
+                <div className="flex flex-col w-60 p-2 px-6 xl:flex-row xl:items-center">
                   <span>Criação:</span>
-                  <p className="overflow-auto">{ creationDate }</p>
+                  <div className="xl:ml-2">
+                    <p>{ creationDate }</p>
+                  </div>
                 </div>
-                <div className="flex items-center w-full p-2 px-6">
+                <div className="flex flex-col w-60 p-2 px-6 xl:flex-row xl:items-center">
                   <span>Favorito:</span>
-                  <p className="ml-2">{ favoriteText }</p>
+                  <div className="xl:ml-2">
+                    <p>{ favoriteText }</p>
+                  </div>
                 </div>
-                <Link to={`/expense/${ id }`} className="flex items-center w-full p-2 px-6 overflow-auto">
-                  Ver detalhes
-                </Link>
+                <div className="col-span-2 flex items-center w-60 p-2 px-6">
+                  <Link to={`/expense/${ id }`} className="text-blue-600 hover:underline">
+                    Ver detalhes
+                  </Link>
+                </div>
               </li>
             );
           }) }

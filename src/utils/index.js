@@ -1,4 +1,5 @@
 export const expenseCategoryTypes = [
+  'Todos',
   'Água',
   'Alimentação',
   'Aluguel',
@@ -11,4 +12,10 @@ export const expenseCategoryTypes = [
   'Telefonia',
   'Transporte',
   'Outros',
+];
+
+export const costTypes = [
+  'Menor que',
+  'Maior que',
+  'Igual a',
 ];

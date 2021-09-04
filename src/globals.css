@@ -47,6 +47,7 @@ table {
   vertical-align:baseline;
   list-style:none;
   max-width: 100%;
+	resize:none;
 }
 
 html, body, #root {
