@@ -1,2 +1,1 @@
-export const ADD_FILTER = 'ADD_FILTER';
-export const REMOVE_FILTERS = 'REMOVE_FILTERS';
+export const SET_EXPENSES = 'SET_EXPENSES';

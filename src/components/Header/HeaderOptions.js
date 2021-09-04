@@ -11,15 +11,9 @@ const HeaderOptions = () => (
           alt="Add icon"
           className="h-7"
         />
-        <span className="hidden sm:flex">Adicionar gasto</span>
+        <span>Adicionar gasto</span>
       </div>
     </Link>
-    <div className="flex items-center mt-2 sm:mt-0">
-      <span className="mr-2">Favoritos:</span>
-      <input
-        type="checkbox"
-      />
-    </div>
   </div>
 );
 

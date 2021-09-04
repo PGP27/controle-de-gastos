@@ -18,6 +18,7 @@ const HeaderSelect = () => {
           onChange={ handleChange }
         >
           <option>Categoria</option>
+          <option>Favoritos</option>
           <option>Valor</option>
         </select>
         <SelectOptions

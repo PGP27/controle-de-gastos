@@ -1,5 +1,3 @@
-import { ADD_FILTER, REMOVE_FILTERS } from './actionsType';
+import { SET_EXPENSES } from './actionsType';
 
-export const addFilter = (expenses) => ({ type: ADD_FILTER, value: expenses });
-
-export const removeFilters = () => ({ type: REMOVE_FILTERS });
+export const setExpenses = (expenses) => ({ type: SET_EXPENSES, value: expenses });

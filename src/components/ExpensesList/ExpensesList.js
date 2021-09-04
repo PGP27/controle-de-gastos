@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const ExpensesList = () => {
   const [expenses, setExpenses] = useState([]);
 
-  const filteredExpenses = useSelector((state) => state.expenses.expenses);
+  const filteredExpenses = useSelector((state) => state.filteredExpenses.filteredExpenses);
 
   useEffect(() => {
     const getExpenses = () => {

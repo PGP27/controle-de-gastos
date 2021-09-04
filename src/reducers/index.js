@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import expenses from './expenses';
+import filteredExpenses from './filteredExpenses';
 
-const reducer = combineReducers({ expenses });
+const reducer = combineReducers({ filteredExpenses });
 
 export default reducer;
