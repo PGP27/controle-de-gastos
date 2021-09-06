@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 
 const ExpenseDetails = () => {
+  const { id } = useParams();
+
   const [isLoading, setIsLoading] = useState(true);
   const [expense, setExpense] = useState();
-
-  const { id } = useParams();
+  const [redirect, setRedirect] = useState();
 
   useEffect(() => {
     const getId = () => {
@@ -21,6 +22,20 @@ const ExpenseDetails = () => {
     };
     getId();
   }, [id]);
+
+  const deleteExpense = () => {
+    const expensesStore = JSON.parse(localStorage.getItem('filteredExpenses'));
+    const answer = window.confirm('Tem certeza que quer excluir esse gasto?');
+    if (answer) {
+      const newExpenses = expensesStore.filter((currentExpense) => currentExpense.id !== id);
+      localStorage.setItem('filteredExpenses', JSON.stringify(newExpenses));
+      setRedirect(true);
+    }
+  }
+
+  if (redirect) {
+    return <Redirect to="/" />
+  }
 
   if (isLoading) {
     return (
@@ -67,12 +82,12 @@ const ExpenseDetails = () => {
           >
             Editar
           </Link>
-          <Link
-            to="/"
+          <button
             className="w-20 px-2 shadow-lg border-2 border-black rounded-lg bg-white transition hover:bg-red-300"
+            onClick={ deleteExpense }
           >
             Excluir
-          </Link>
+          </button>
         </div>
       </div>
     );

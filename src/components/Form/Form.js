@@ -83,8 +83,8 @@ const Form = () => {
         localStorage.setItem('filteredExpenses', JSON.stringify(filteredExpenses));
         alert('Gasto adicionado com sucesso!');
       }
+      setRedirect(true);
     }
-    setRedirect(true);
   }
 
   if (redirect) {
