@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { expenseCategoryTypes } from '../../utils/index';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 const Form = () => {
@@ -13,6 +13,7 @@ const Form = () => {
 
   const [expense, setExpense] = useState(INITIAL_STATE);
   const [descriptionLength, setDescriptionLength] = useState(0);
+  const [redirect, setRedirect] = useState();
 
   const { id } = useParams();
 
@@ -22,6 +23,8 @@ const Form = () => {
       if (id) {
         const filteredExpense = expensesStore.find((expense) => expense.id === id);
         setExpense(filteredExpense);
+        const descId = filteredExpense.description.length;
+        setDescriptionLength(descId);
       }
     };
     setInitExpense();
@@ -59,22 +62,39 @@ const Form = () => {
       const year = new Date().getFullYear();
   
       const creationDate = `${day}/${month}/${year}`;
-      const newExpense = {
-        ...expense,
-        id: uuidv4(),
-        creationDate,
-      };
-  
-      filteredExpenses.push(newExpense);
-      localStorage.setItem('filteredExpenses', JSON.stringify(filteredExpenses));
-      alert('Gasto adicionado com sucesso!');
+
+      if (id) {
+        const newExpense = {
+          ...expense,
+          creationDate,
+        };
+        const newFilteredExpenses = filteredExpenses.filter((expense) => expense.id !== id);
+        newFilteredExpenses.push(newExpense);
+        localStorage.setItem('filteredExpenses', JSON.stringify(newFilteredExpenses));
+        alert('Gasto editado com sucesso!');
+      } else {
+        const newExpense = {
+          ...expense,
+          id: uuidv4(),
+          creationDate,
+        };
+
+        filteredExpenses.push(newExpense);
+        localStorage.setItem('filteredExpenses', JSON.stringify(filteredExpenses));
+        alert('Gasto adicionado com sucesso!');
+      }
     }
-    clearForm();
+    setRedirect(true);
+  }
+
+  if (redirect) {
+    return <Redirect to="/" />
   }
 
   if (expense) {
     const { number, category, description, favorite } = expense;
     const title = id ? 'Editar gasto' : 'Adicionar gasto';
+    const buttonTypeTitle = id ? 'Editar' : 'Adicionar';
     return (
       <form className="w-full flex flex-col items-center p-2 shadow-lg rounded-lg border border-gray bg-blue-100 sm:w-4/5 lg:w-1/2">
         <legend className="mt-4 text-2xl">{ title }</legend>
@@ -148,7 +168,7 @@ const Form = () => {
             onClick={ saveExpense }
             className="w-24 px-2 mx-2 shadow-lg border-2 border-black rounded-lg bg-white transition hover:bg-green-100"
           >
-            Adicionar
+            { buttonTypeTitle }
           </button>
         </div>
       </form>
